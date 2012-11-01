@@ -27,6 +27,11 @@ function! Send_to_Tmux(text)
   call system("tmux paste-buffer -t " . target)
 endfunction
 
+" Wraps text in a way friendly to ipython
+function! Send_to_IPython(text)
+	Send_to_Tmux("%cpaste\n" . text . "\n--\n")
+endfunction
+
 " Session completion
 function! Tmux_Session_Names(A,L,P)
   return system("tmux list-sessions | sed -e 's/:.*$//'")
@@ -59,5 +64,8 @@ endfunction
 
 vmap <C-c><C-c> "ry :call Send_to_Tmux(@r)<CR>
 nmap <C-c><C-c> vip<C-c><C-c>
+
+vmap <C-c><C-i> "ry :call Send_to_IPython(@r)<CR>
+nmap <C-c><C-i> vip<C-c><C-i>
 
 nmap <C-c>v :call <SID>Tmux_Vars()<CR>
